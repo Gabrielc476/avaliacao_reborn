@@ -1,4 +1,4 @@
-# raiz/database/models/user.py
+# database/models/user.py
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -7,8 +7,7 @@ from database.connect import Base
 
 class User(Base):
     """
-    Modelo para usuários do sistema (administradores) que podem criar
-    tabelas e questionários
+    Modelo para usuários do sistema
     """
     __tablename__ = "users"
 
@@ -19,6 +18,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    # Relacionamentos - usar string para evitar circular imports
-    custom_tables = relationship("database.models.custom_table.CustomTable", back_populates="owner")
-    questionnaires = relationship("database.models.questionnaire.Questionnaire", back_populates="owner")
+    # Relacionamentos
+    questionnaires = relationship("Questionnaire", back_populates="owner")
+    datasets = relationship("Dataset", back_populates="owner")
+    instruments = relationship("Instrument", back_populates="owner")

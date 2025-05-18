@@ -1,6 +1,7 @@
 # routes/auth_routes.py
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 
 from database.connect import db_connection
 from database.schemas.user import UserCreate, User as UserSchema
@@ -34,28 +35,25 @@ async def register(
     """
     return await auth_service.create_user(db, user_data)
 
-
+class LoginCredentials(BaseModel):
+    username: str
+    password: str
 @router.post("/login", response_model=Token)
 async def login(
-        username: str,
-        password: str,
+        credentials: LoginCredentials,  # Modificado aqui
         db: Session = Depends(db_connection.get_db)
 ):
     """
     Faz login e obtém tokens de acesso e atualização
 
     Args:
-        username: Nome de usuário ou email
-        password: Senha
+        credentials: Credenciais de login (username e password)
         db: Sessão do banco de dados
 
     Returns:
         Tokens de acesso e atualização
-
-    Raises:
-        HTTPException: Se as credenciais forem inválidas
     """
-    user = await auth_service.authenticate_user(db, username, password)
+    user = await auth_service.authenticate_user(db, credentials.username, credentials.password)
 
     if not user:
         raise HTTPException(
