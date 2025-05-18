@@ -1,11 +1,8 @@
 # raiz/database/models/table_row.py
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, JSON
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
-
-# Isso será importado do connect.py na implementação real
-Base = declarative_base()
+from database.connect import Base
 
 
 class TableRow(Base):
@@ -20,8 +17,8 @@ class TableRow(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # Relacionamentos
-    table = relationship("CustomTable", back_populates="rows")
+    # Relacionamentos - usar string para evitar circular imports
+    table = relationship("database.models.custom_table.CustomTable", back_populates="rows")
     cell_values = relationship("CellValue", back_populates="row")
     questionnaire_responses = relationship("QuestionnaireResponse", back_populates="row")
 
@@ -38,9 +35,9 @@ class CellValue(Base):
     column_id = Column(Integer, ForeignKey("table_columns.id"))
     value = Column(String)  # Valor armazenado como string, convertido conforme o tipo
 
-    # Relacionamentos
+    # Relacionamentos - usar string para evitar circular imports
     row = relationship("TableRow", back_populates="cell_values")
-    column = relationship("TableColumn", back_populates="cell_values")
+    column = relationship("database.models.table_column.TableColumn", back_populates="cell_values")
 
 
 class QuestionnaireResponse(Base):
@@ -57,5 +54,5 @@ class QuestionnaireResponse(Base):
     scores = Column(JSON)  # Pontuações calculadas em formato JSON
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    # Relacionamentos
+    # Relacionamentos - usar string para evitar circular imports
     row = relationship("TableRow", back_populates="questionnaire_responses")

@@ -1,11 +1,8 @@
 # raiz/database/models/questionnaire.py
 from sqlalchemy import Column, Integer, String, Text, JSON, Boolean, ForeignKey, DateTime
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
-
-# Isso será importado do connect.py na implementação real
-Base = declarative_base()
+from database.connect import Base
 
 
 class Questionnaire(Base):
@@ -23,6 +20,6 @@ class Questionnaire(Base):
     structure = Column(JSON)  # Estrutura do questionário (perguntas, escalas, etc.)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
-    # Relacionamentos
-    owner = relationship("User", back_populates="questionnaires")
-    table_questionnaires = relationship("TableQuestionnaire", back_populates="questionnaire")
+    # Relacionamentos - usar string para evitar circular imports
+    owner = relationship("database.models.user.User", back_populates="questionnaires")
+    table_questionnaires = relationship("database.models.custom_table.TableQuestionnaire", back_populates="questionnaire")

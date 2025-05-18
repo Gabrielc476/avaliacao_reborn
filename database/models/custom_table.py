@@ -1,11 +1,8 @@
 # raiz/database/models/custom_table.py
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
-
-# Isso será importado do connect.py na implementação real
-Base = declarative_base()
+from database.connect import Base
 
 
 class CustomTable(Base):
@@ -22,10 +19,10 @@ class CustomTable(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
-    # Relacionamentos
-    owner = relationship("User", back_populates="custom_tables")
-    columns = relationship("TableColumn", back_populates="table")
-    rows = relationship("TableRow", back_populates="table")
+    # Relacionamentos - usar string para evitar circular imports
+    owner = relationship("database.models.user.User", back_populates="custom_tables")
+    columns = relationship("database.models.table_column.TableColumn", back_populates="table")
+    rows = relationship("database.models.table_row.TableRow", back_populates="table")
     table_questionnaires = relationship("TableQuestionnaire", back_populates="table")
 
 
@@ -41,6 +38,6 @@ class TableQuestionnaire(Base):
     table_id = Column(Integer, ForeignKey("custom_tables.id"))
     questionnaire_id = Column(Integer, ForeignKey("questionnaires.id"))
 
-    # Relacionamentos
+    # Relacionamentos - usar string para evitar circular imports
     table = relationship("CustomTable", back_populates="table_questionnaires")
-    questionnaire = relationship("Questionnaire", back_populates="table_questionnaires")
+    questionnaire = relationship("database.models.questionnaire.Questionnaire", back_populates="table_questionnaires")

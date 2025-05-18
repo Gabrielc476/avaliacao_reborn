@@ -1,11 +1,8 @@
 # raiz/database/models/user.py
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
-
-# Isso será importado do connect.py na implementação real
-Base = declarative_base()
+from database.connect import Base
 
 
 class User(Base):
@@ -22,6 +19,6 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    # Relacionamentos
-    custom_tables = relationship("CustomTable", back_populates="owner")
-    questionnaires = relationship("Questionnaire", back_populates="owner")
+    # Relacionamentos - usar string para evitar circular imports
+    custom_tables = relationship("database.models.custom_table.CustomTable", back_populates="owner")
+    questionnaires = relationship("database.models.questionnaire.Questionnaire", back_populates="owner")

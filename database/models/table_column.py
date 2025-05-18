@@ -1,11 +1,8 @@
 # raiz/database/models/table_column.py
 from sqlalchemy import Column, Integer, String, Text, Boolean, JSON, ForeignKey, Enum
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from .enums import DataType
-
-# Isso será importado do connect.py na implementação real
-Base = declarative_base()
+from database.connect import Base
 
 
 class TableColumn(Base):
@@ -27,6 +24,6 @@ class TableColumn(Base):
     # Campos para validação específica de cada tipo de dado
     validation = Column(JSON, nullable=True)  # Regras de validação específicas do tipo
 
-    # Relacionamentos
-    table = relationship("CustomTable", back_populates="columns")
-    cell_values = relationship("CellValue", back_populates="column")
+    # Relacionamentos - usar string para evitar circular imports
+    table = relationship("database.models.custom_table.CustomTable", back_populates="columns")
+    cell_values = relationship("database.models.table_row.CellValue", back_populates="column")

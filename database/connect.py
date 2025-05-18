@@ -1,7 +1,6 @@
 # raiz/database/connect.py
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, registry, declarative_base
 import os
 from dotenv import load_dotenv
 
@@ -35,7 +34,10 @@ class DatabaseConnection:
         # Criar engine com PostgreSQL
         cls._engine = create_engine(DATABASE_URL)
         cls._SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=cls._engine)
-        cls._Base = declarative_base()
+
+        # Usar registry para criar a base em estilo SQLAlchemy 2.0
+        mapper_registry = registry()
+        cls._Base = mapper_registry.generate_base()
 
     @property
     def engine(self):

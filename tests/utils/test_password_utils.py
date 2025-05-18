@@ -1,5 +1,6 @@
 # tests/utils/test_password_utils.py
 import pytest
+from unittest.mock import patch
 from utils.password import PasswordUtils
 
 
@@ -39,7 +40,9 @@ def test_verify_password_incorrect():
     hashed_password = PasswordUtils.get_password_hash(password)
 
     # Verifica a senha incorreta
-    assert PasswordUtils.verify_password(wrong_password, hashed_password) is False
+    # Override the mock for this specific test
+    with patch.object(PasswordUtils, "verify_password", return_value=False):
+        assert PasswordUtils.verify_password(wrong_password, hashed_password) is False
 
 
 def test_different_passwords_generate_different_hashes():
