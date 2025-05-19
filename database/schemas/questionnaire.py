@@ -43,7 +43,8 @@ class Questionnaire(QuestionnaireBase):
     structure: Dict[str, Any]
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated from orm_mode=True for Pydantic v2
+
 
 
 class QuestionnaireUpdate(BaseModel):
@@ -68,4 +69,4 @@ class QuestionnaireResponseResult(QuestionnaireResponse):
     respondent_id: Optional[int] = None  # ID do respondente se autenticado
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated from orm_mode=True for Pydantic v2

@@ -42,7 +42,7 @@ class DatasetResponse(BaseModel):
     row_count: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated from orm_mode=True for Pydantic v2
 
 
 class DatasetDetail(DatasetResponse):
@@ -50,7 +50,7 @@ class DatasetDetail(DatasetResponse):
     data: List[Dict[str, Any]]
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated from orm_mode=True for Pydantic v2
 
 
 class InstrumentResultsResponse(BaseModel):
@@ -61,4 +61,4 @@ class InstrumentResultsResponse(BaseModel):
     results: List[Dict[str, Any]]
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated from orm_mode=True for Pydantic v2
