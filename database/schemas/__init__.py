@@ -10,6 +10,19 @@ from .dataset import (
     InstrumentInfo,
     InstrumentResultsResponse
 )
+from .statistical_analysis import (
+    AnalysisType,
+    StatisticalAnalysisCreate,
+    StatisticalAnalysisUpdate,
+    StatisticalAnalysisResponse,
+    StatisticalAnalysisDetail,
+    DescriptiveAnalysisParameters,
+    ReliabilityAnalysisParameters,
+    ComparativeAnalysisParameters,
+    ManovaAnalysisParameters,
+    CorrelationAnalysisParameters,
+    LongitudinalAnalysisParameters
+)
 
 # Exportar todos os schemas para fácil importação
 __all__ = [
@@ -27,5 +40,16 @@ __all__ = [
     'DatasetResponse',
     'DatasetDetail',
     'InstrumentInfo',
-    'InstrumentResultsResponse'
+    'InstrumentResultsResponse',
+    'AnalysisType',
+    'StatisticalAnalysisCreate',
+    'StatisticalAnalysisUpdate',
+    'StatisticalAnalysisResponse',
+    'StatisticalAnalysisDetail',
+    'DescriptiveAnalysisParameters',
+    'ReliabilityAnalysisParameters',
+    'ComparativeAnalysisParameters',
+    'ManovaAnalysisParameters',
+    'CorrelationAnalysisParameters',
+    'LongitudinalAnalysisParameters'
 ]
