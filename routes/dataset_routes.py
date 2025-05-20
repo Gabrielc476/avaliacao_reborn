@@ -119,21 +119,7 @@ async def get_dataset(
     """
     dataset = await dataset_service.get_dataset(db, dataset_id, current_user)
     # Formatar a resposta
-    response = DatasetResponse.from_orm(dataset)
-    response.row_count = len(dataset.data) if dataset.data else 0
-
-    # Extrair info dos instrumentos
-    response.instruments = [
-        {
-            "id": instr.instrument.id,
-            "code": instr.instrument.code,
-            "name": instr.instrument.name,
-            "version": instr.instrument.version
-        }
-        for instr in dataset.instruments
-    ]
-
-    return response
+    return format_dataset_response(dataset)
 
 
 @router.get("/{dataset_id}/detail", response_model=DatasetDetail)
@@ -154,22 +140,7 @@ async def get_dataset_detail(
         Conjunto de dados com detalhes completos
     """
     dataset = await dataset_service.get_dataset(db, dataset_id, current_user)
-    # Formatar a resposta
-    detail = DatasetDetail.from_orm(dataset)
-    detail.row_count = len(dataset.data) if dataset.data else 0
-
-    # Extrair info dos instrumentos
-    detail.instruments = [
-        {
-            "id": instr.instrument.id,
-            "code": instr.instrument.code,
-            "name": instr.instrument.name,
-            "version": instr.instrument.version
-        }
-        for instr in dataset.instruments
-    ]
-
-    return detail
+    return format_dataset_detail(dataset)
 
 
 @router.get("/{dataset_id}/instruments/{instrument_code}/results", response_model=InstrumentResultsResponse)
@@ -217,22 +188,7 @@ async def update_dataset(
     update_data = dataset_data.dict()
     dataset = await dataset_service.update_dataset(db, dataset_id, update_data, current_user)
 
-    # Formatar a resposta
-    response = DatasetResponse.from_orm(dataset)
-    response.row_count = len(dataset.data) if dataset.data else 0
-
-    # Extrair info dos instrumentos
-    response.instruments = [
-        {
-            "id": instr.instrument.id,
-            "code": instr.instrument.code,
-            "name": instr.instrument.name,
-            "version": instr.instrument.version
-        }
-        for instr in dataset.instruments
-    ]
-
-    return response
+    return format_dataset_response(dataset)
 
 
 @router.delete("/{dataset_id}", status_code=status.HTTP_204_NO_CONTENT)
